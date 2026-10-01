@@ -1,0 +1,105 @@
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro - DoeFarmaPet</title>
+    <style>
+        :root { --primary: #2D6A4F; --accent: #ff9900; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(rgba(45, 106, 79, 0.8), rgba(45, 106, 79, 0.8)), 
+                        url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover; 
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px;
+        }
+
+        .box { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 30px; 
+            border-radius: 15px; 
+            width: 100%; 
+            max-width: 400px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-top: 6px solid var(--primary);
+        }
+
+        .logo-container { text-align: center; margin-bottom: 20px; }
+        .logo-container img { height: 80px; width: auto; object-fit: contain; }
+
+        h2 { color: var(--primary); text-align: center; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; }
+        label { font-size: 13px; color: #666; display: block; margin-top: 10px; }
+        
+        .btn { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 50px; margin-top: 15px; transition: 0.3s; }
+        .btn:hover { background: var(--accent); }
+        
+        .toggle-senha { cursor: pointer; font-size: 10px; color: #666; float: right; margin-top: -30px; margin-right: 10px; position: relative; }
+        .grupo { display: flex; gap: 10px; }
+    </style>
+    <script>
+        function buscaCEP() {
+            let cep = document.getElementById("cep").value.replace(/\D/g, "");
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(res => res.json())
+                    .then(dados => {
+                        if (!dados.erro) {
+                            document.getElementById("rua").value = dados.logradouro;
+                            document.getElementById("bairro").value = dados.bairro;
+                        }
+                    });
+            }
+        }
+        function toggle() {
+            var x = document.getElementById("senha");
+            x.type = x.type === "password" ? "text" : "password";
+        }
+    </script>
+</head>
+<body>
+    <div class="box">
+        <div class="logo-container">
+         <a href="index.html" class="logo-container">
+    <img src="farma.jpeg" alt="Logo DoeFarmaPet">
+    
+</a>
+        
+        <h2>Criar Conta</h2>
+        <?= $mensagem ?>
+        <form method="POST">
+            <input type="text" name="nome" placeholder="Nome Completo" required>
+            <input type="email" name="email" placeholder="E-mail" required>
+            <input type="text" name="telefone" placeholder="WhatsApp" required>
+            
+            <label>Data de Nascimento:</label>
+            <input type="date" name="data_nascimento" required>
+            
+            <input type="text" id="cep" name="cep" placeholder="CEP" maxlength="9" onblur="buscaCEP()" required>
+            <input type="text" id="rua" name="rua" placeholder="Rua" required readonly>
+            <input type="text" id="bairro" name="bairro" placeholder="Bairro" required readonly>
+            
+            <div class="grupo">
+                <input type="text" name="numero" placeholder="Nº" required>
+                <input type="text" name="complemento" placeholder="Comp.">
+            </div>
+            
+            <div class="senha-container">
+                <input type="password" name="senha" id="senha" placeholder="Crie uma Senha" required>
+                <span class="toggle-senha" onclick="toggle()">MOSTRAR</span>
+            </div>
+            
+            <button type="submit" class="btn">CADASTRAR</button>
+        </form>
+        <p style="text-align:center; margin-top:15px;"><a href="login.html" style="color:var(--primary);">Voltar ao Login</a></p>
+    </div>
+</body>
+</html>

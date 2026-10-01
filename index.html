@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-adsense-account" content="ca-pub-1403795179722561">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1403795179722561" crossorigin="anonymous"></script>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>DoeFarmaPet - Conectando Esperança</title>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #2D6A4F; --accent: #ff9900; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; color: #333; }
+
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(rgba(45, 106, 79, 0.9), rgba(45, 106, 79, 0.9)), 
+                        url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            padding: 40px 5%;
+        }
+
+        .dashboard-layout { 
+            display: flex; 
+            gap: 30px; 
+            max-width: 1400px; 
+            margin: auto; 
+            width: 100%;
+        }
+
+        /* Sidebar / Menu Lateral Responsivo */
+        .sidebar { 
+            width: 260px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            flex-shrink: 0; 
+        }
+        
+        .logo-container {
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none; margin-bottom: 20px;
+        }
+        .logo-container img {
+            width: 70px; height: 70px; border-radius: 50%; object-fit: cover;
+            border: 2px solid white;
+        }
+        .logo-container span { color: white; font-size: 20px; font-weight: bold; letter-spacing: 1px; }
+
+        .btn-sidebar { 
+            display: block;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95); 
+            color: var(--primary); 
+            padding: 14px 18px; 
+            border-radius: 12px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            transition: 0.3s;
+            text-align: left;
+        }
+        .btn-sidebar i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        .btn-sidebar:hover { background: var(--accent); color: white; }
+
+        /* Alertas */
+        .alert-message {
+            padding: 15px; border-radius: 10px; margin-bottom: 20px; font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .alert-success { background-color: #d4edda; color: #155724; border-left: 5px solid #28a745; }
+        .alert-error { background-color: #f8d7da; color: #721c24; border-left: 5px solid #dc3545; }
+
+        /* Conteúdo Principal */
+        .content-area { flex-grow: 1; color: white; width: 100%; min-width: 0; }
+        .content-area h1 { font-size: 2rem; margin-bottom: 10px; }
+        .missao { font-size: 1.1rem; margin-bottom: 25px; font-style: italic; opacity: 0.95; line-height: 1.5; }
+        
+        /* Formulário de Busca Otimizado */
+        .form-busca {
+            display: flex; 
+            max-width: 600px; 
+            width: 100%;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-radius: 25px;
+            overflow: hidden;
+        }
+        .form-busca input {
+            padding: 15px 20px; 
+            flex: 1; 
+            border: none; 
+            outline: none;
+            font-size: 1rem;
+        }
+        .form-busca button {
+            padding: 0 25px; 
+            border: none; 
+            background: var(--accent); 
+            color: white; 
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .form-busca button:hover { background: #e08500; }
+
+    :root { --azul: #004a99; --laranja: #ff6600; --primary: #2D6A4F; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; }
+
+    /* Grade responsiva inteligente */
+    .grid-anuncios { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+        gap: 20px; 
+        margin-top: 20px; 
+        width: 100%;
+    }
+
+    /* Card elegante e adaptável */
+    .card { 
+        background: rgba(255,255,255,0.95); 
+        padding: 20px; 
+        border-radius: 15px; 
+        color: #333; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* IMAGEM NÍDIDA E RESPONSIVA */
+    .img-produto { 
+        width: 100%; 
+        height: 180px; /* Altura padrão ideal para cards */
+        object-fit: cover; /* Preenche o espaço cortando o excesso sem deformar a proporção */
+        object-position: center; /* Mantém o foco centralizado no objeto/foto */
+        border-radius: 10px; 
+        margin-bottom: 12px; 
+        background: #f0f0f0; /* Cor de fundo caso demore a carregar */
+        image-rendering: -webkit-optimize-contrast; /* Melhora a nitidez em alguns navegadores mobile */
+    }
+        
+        /* SEÇÃO DE AVALIAÇÕES */
+        .titulo-secao { margin-top: 35px; font-size: 1.6rem; border-left: 4px solid var(--accent); padding-left: 10px; margin-bottom: 20px; }
+        .card-avaliacao { background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .estrelas-ouro { color: #ff9900; margin-bottom: 8px; font-size: 1rem; }
+        .comentario-texto { font-style: italic; color: #555; font-size: 0.95rem; line-height: 1.5; }
+
+        .btn-whatsapp { position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white; padding: 14px 20px; border-radius: 50px; z-index: 1000; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        /* RESPONSIVIDADE FLUIDA PARA QUALQUER TELA */
+        @media (max-width: 900px) {
+            .dashboard-layout { flex-direction: column; gap: 20px; }
+            .sidebar { 
+                width: 100%; 
+                flex-direction: row; 
+                flex-wrap: wrap; 
+                justify-content: center; 
+                gap: 8px; 
+            }
+            .logo-container { width: 100%; justify-content: center; margin-bottom: 5px; }
+            .btn-sidebar { flex: 1 1 130px; width: auto; text-align: center; font-size: 0.85rem; padding: 10px 8px; }
+            .hero { padding: 20px 4%; background-attachment: scroll; }
+        }
+
+        .rodape-projeto {
+            text-align: center;
+            padding: 30px 15px;
+            margin-top: 40px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.75);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            line-height: 1.6;
+        }
+        .rodape-projeto strong { color: var(--accent); }
+        
+    </style>
+</head>
+<body>
+<section class="hero">
+    <div class="dashboard-layout">
+        
+        <!-- MENU LATERAL ÚNICO -->
+        <nav class="sidebar">
+            <a href="index.html" class="logo-container">
+                <img src="farma.jpeg" alt="Logo DoeFarmaPet">
+                <span>DOEFARMAPET</span>
+            </a>
+            <a href="historia.html" class="btn-sidebar"><i class="fa-solid fa-book-open"></i> Nossa História</a>
+            <a href="saude.html" class="btn-sidebar"><i class="fa-solid fa-stethoscope"></i> Clínicas</a>
+            <a href="parceiros.html" class="btn-sidebar"><i class="fa-solid fa-hand-holding-heart"></i> ONGs</a>
+            <a href="painel.html" class="btn-sidebar"><i class="fa-solid fa-gauge"></i> Painel</a>
+            <a href="privacidade.html" class="btn-sidebar"><i class="fa-solid fa-shield-halved"></i> Privacidade</a>
+            <a href="login.html" class="btn-sidebar"><i class="fa-solid fa-user"></i> Conta</a>
+        </nav>
+        
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="content-area">
+            <div id="statusMensagem" class="alert-message" role="status" aria-live="polite" hidden></div>
+            
+            <h1>Plataforma de Doação</h1>
+            <p class="missao">"O DoeFarmaPet é uma plataforma de doação gratuita de medicamentos veterinários que combate o desperdício conectando tutores e protetores para salvar vidas animais."</p>
+
+            <!-- FORMULÁRIO DE BUSCA -->
+            <form action="index.html" method="GET" class="form-busca">
+                <input id="campoBusca" type="text" name="q" placeholder="Buscar remédio ou acessório...">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+            </form>
+<!-- GRID DE ANÚNCIOS -->
+            <h2 class="titulo-secao"><i class="fa-solid fa-pills"></i> Medicamentos Disponíveis</h2>
+            <div class="grid-anuncios">
+                
+                <p style="margin-top:20px;">Nenhum anúncio encontrado.</p>
+            </div><br>
+            <!-- BLOCO DE ANÚNCIOS GOOGLE ADSENSE -->
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-1403795179722561"
+                     data-ad-slot="7509304369"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+            </div>
+            <!-- BLOCO DE CONTEÚDO RICO PARA O GOOGLE ADSENSE -->
+            <div style="background: rgba(255, 255, 255, 0.95); color: #333; padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                <h3 style="color: var(--primary); margin-bottom: 12px; font-size: 1.3rem;"><i class="fa-solid fa-circle-info"></i> Como Funciona o DoeFarmaPet?</h3>
+                <p style="line-height: 1.6; margin-bottom: 15px; font-size: 0.95rem;">
+                    O <strong>DoeFarmaPet</strong> é uma iniciativa comunitária desenvolvida em Recife para combater o desperdício de medicamentos veterinários e apoiar tutores de pets que precisam de auxílio em tratamentos. 
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border-left: 4px solid var(--primary);">
+                        <strong>1. Doação Solidária</strong>
+                        <p style="font-size: 0.85rem; color: #555; margin-top: 5px;">Repasse sobras de remédios válidos do seu pet para quem realmente precisa.</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border-left: 4px solid var(--accent);">
+                        <strong>2. Busca Local</strong>
+                        <p style="font-size: 0.85rem; color: #555; margin-top: 5px;">Encontre insumos e medicamentos disponíveis de forma gratuita na sua região.</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border-left: 4px solid #28a745;">
+                        <strong>3. Conexão Segura</strong>
+                        <p style="font-size: 0.85rem; color: #555; margin-top: 5px;">Alinhe a retirada diretamente com doadores ou parceiros da rede de apoio.</p>
+                    </div>
+                </div>
+            </div>
+
+           
+            <!-- SEÇÃO SHOPEE -->
+            <!-- SEÇÃO SHOPEE COM ÍCONE -->
+<section style="padding: 30px 0; text-align: center;">
+    <a href="https://shopee.com.br/search?keyword=pets" target="_blank" style="text-decoration: none; display: block; background: #fff; padding: 20px; border-radius: 15px; border: 2px solid #ee4d2d; max-width: 400px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <img src="https://logodownload.org/wp-content/uploads/2021/04/shopee-logo-1.png" alt="Shopee" style="width: 140px; display: block; margin: 0 auto 10px auto;">
+        
+        <!-- Texto com o ícone de sacola de compras ou patinha -->
+        <p style="color: #333; font-weight: bold; margin: 0;">
+            <i class="fa-solid fa-bag-shopping" style="color: #ee4d2d; margin-right: 5px;"></i> Ofertas Pet na Shopee
+        </p>
+        
+        <span style="color: #ee4d2d; font-size: 12px; display: inline-block; margin-top: 5px;">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Clique aqui e confira!
+        </span>
+    </a>
+</section>
+          <!-- SEÇÃO DE AVALIAÇÕES -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 35px; flex-wrap: wrap; gap: 10px;">
+                <h2 class="titulo-secao" style="margin-top: 0;"><i class="fa-solid fa-star"></i> O que dizem sobre nós</h2>
+                
+                <!-- BOTÃO DE AVALIAR ATUALIZADO COM O CONTADOR -->
+                <a href="avaliar.html" style="background: var(--accent); color: white; padding: 10px 18px; border-radius: 20px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: 0.3s; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-pen-to-square"></i> Deixar minha avaliação
+                </a>
+            </div>
+
+            <div class="grid-avaliacoes" style="display: block;">
+                <p style="opacity: 0.8; margin-top: 15px;">Nenhuma avaliação disponível ainda. Seja o primeiro a avaliar!</p>
+            </div>
+            <footer class="rodape-projeto">
+    <p>© 2026 <strong>DoeFarmaPet</strong>. Todos os direitos reservados. | <a href="privacidade.html" style="color: var(--accent); text-decoration: none;">Política de Privacidade</a></p>
+    <p>Projeto desenvolvido no curso técnico de Desenvolvimento de Sistemas — Ginásio Pernambucano.</p>
+    <p>Recife, Pernambuco.</p>
+</footer>
+
+        </div>
+    </div>
+</section>
+
+<a href="https://wa.me/5581993057487" class="btn-whatsapp" target="_blank"><i class="fa-brands fa-whatsapp"></i> Sugestão/Elogios</a>
+
+<!-- SCRIPT DE STATUS, BUSCA E PWA -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const parametros = new URLSearchParams(window.location.search);
+    const status = parametros.get('status');
+    const mensagem = document.getElementById('statusMensagem');
+    const campoBusca = document.getElementById('campoBusca');
+    const busca = parametros.get('q');
+
+    if (busca && campoBusca) campoBusca.value = busca;
+    if (mensagem && (status === 'sucesso' || status === 'erro' || status === 'erro_dados')) {
+        mensagem.classList.add(status === 'sucesso' ? 'alert-success' : 'alert-error');
+        mensagem.textContent = status === 'sucesso'
+            ? 'Avaliação enviada com sucesso! Obrigado por ajudar a melhorar nossa comunidade.'
+            : 'Ops! Não foi possível salvar sua avaliação. Por favor, tente novamente.';
+        mensagem.hidden = false;
+    }
+
+});
+
+/* Service Worker PWA */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) {
+                console.log('Service Worker registrado:', registration.scope);
+            })
+            .catch(function(err) {
+                console.log('Falha ao registrar Service Worker:', err);
+            });
+    });
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <title>Login - DoeFarmaPet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --primary: #2D6A4F; 
+            --secondary: #40916C; 
+            --bg: #F8FAF9; 
+            --text: #333;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(rgba(45, 106, 79, 0.45), rgba(45, 106, 79, 0.45)), 
+                        url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover; 
+            background-position: center;
+            background-attachment: fixed;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px;
+        }
+
+        .login-box { 
+            background: rgba(255, 255, 255, 0.98); 
+            padding: 40px 30px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 380px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-top: 5px solid var(--primary);
+            text-align: center;
+        }
+
+        /* Container do Logotipo */
+        .logo-login {
+            width: 100%;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .logo-login img {
+            height: 300px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        h2 { 
+            color: var(--primary); 
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 25px; 
+            letter-spacing: 0.5px;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 12px 16px; 
+            margin: 8px 0; 
+            border: 1px solid #CBD5E1; 
+            border-radius: 8px; 
+            outline: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+        }
+
+        .btn { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            width: 100%; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 15px;
+            border-radius: 8px; 
+            margin-top: 15px; 
+            transition: 0.3s;
+        }
+        .btn:hover { 
+            background: #1B4332; 
+        }
+        
+        .btn-recuperar { 
+            background: #D97706; /* Laranja queimado harmônico */
+        }
+        .btn-recuperar:hover {
+            background: #B45309;
+        }
+
+        .senha-container { position: relative; width: 100%; }
+        .olho { 
+            position: absolute; 
+            right: 14px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            cursor: pointer; 
+            font-size: 11px; 
+            color: var(--primary); 
+            font-weight: bold; 
+            background: #F1F5F9; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            user-select: none;
+        }
+
+        .links { 
+            margin-top: 25px; 
+            text-align: center; 
+            font-size: 14px; 
+            border-top: 1px solid #E2E8F0; 
+            padding-top: 15px; 
+        }
+        .links a { 
+            color: var(--primary); 
+            text-decoration: none; 
+            display: block; 
+            margin-bottom: 12px; 
+            font-weight: 600; 
+            transition: 0.2s;
+        }
+        .links a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        #formRecuperar { display: none; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <div class="logo-login">
+           <img src="farma.jpeg" alt="Logo DoeFarmaPet">
+        </div>
+        
+        <h2>DOEFARMAPET</h2>
+        <div id="mensagem" role="status" aria-live="polite" style="text-align:center;"></div>
+
+        <form method="POST" id="formLogin">
+            <input type="hidden" name="acao" value="login">
+            <input type="email" name="email" placeholder="Seu E-mail" required>
+            <div class="senha-container">
+                <input type="password" name="senha" id="s1" placeholder="Sua Senha" required>
+                <span class="olho" onclick="ver('s1')">MOSTRAR</span>
+            </div>
+            <button type="submit" class="btn">ENTRAR</button>
+        </form>
+
+        <div id="formRecuperar">
+            <h3 style="color:#D97706; font-size:15px; text-align:center; margin-bottom:15px; font-weight:700;">CRIAR NOVA SENHA</h3>
+            <form method="POST">
+                <input type="hidden" name="acao" value="recuperar">
+                <input type="email" name="email" placeholder="Confirme seu E-mail" required>
+                <input type="text" name="resposta_nascimento" placeholder="Data de Nascimento (DD/MM/AAAA)" required>
+                <div class="senha-container">
+                    <input type="password" name="nova_senha" id="s2" placeholder="Nova Senha" required>
+                    <span class="olho" onclick="ver('s2')">MOSTRAR</span>
+                </div>
+                <button type="submit" class="btn btn-recuperar">DEFINIR NOVA SENHA</button>
+            </form>
+        </div>
+        
+        <div class="links">
+            <a href="#" id="btnEsqueci" onclick="telaRecuperar()">Esqueci a senha</a>
+            <a href="cadastrar.html">Não tem conta? Cadastre-se</a>
+            <a href="index.html" style="font-weight:normal; color:#64748B;">Voltar ao Início</a>
+        </div>
+    </div>
+
+    <script>
+        function ver(id) {
+            var x = document.getElementById(id);
+            x.type = x.type === "password" ? "text" : "password";
+        }
+        function telaRecuperar() {
+            var fL = document.getElementById("formLogin");
+            var fR = document.getElementById("formRecuperar");
+            var btn = document.getElementById("btnEsqueci");
+            if (fR.style.display === "block") {
+                fR.style.display = "none"; fL.style.display = "block";
+                btn.innerText = "Esqueci a senha";
+            } else {
+                fR.style.display = "block"; fL.style.display = "none";
+                btn.innerText = "Voltar para Login";
+            }
+        }
+    </script>
+</body>
+</html>
