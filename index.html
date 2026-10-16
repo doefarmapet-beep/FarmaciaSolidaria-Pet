@@ -198,6 +198,8 @@
             <a href="historia.html" class="btn-sidebar"><i class="fa-solid fa-book-open"></i> Nossa História</a>
             <a href="saude.html" class="btn-sidebar"><i class="fa-solid fa-stethoscope"></i> Clínicas</a>
             <a href="parceiros.html" class="btn-sidebar"><i class="fa-solid fa-hand-holding-heart"></i> ONGs</a>
+            <a href="doacao.html" class="btn-sidebar"><i class="fa-solid fa-box-open"></i> Cadastrar doação</a>
+            <a href="cuidadores.html" class="btn-sidebar"><i class="fa-solid fa-paw"></i> Cuidadores pet</a>
             <a href="painel.html" class="btn-sidebar"><i class="fa-solid fa-gauge"></i> Painel</a>
             <a href="privacidade.html" class="btn-sidebar"><i class="fa-solid fa-shield-halved"></i> Privacidade</a>
             <a href="login.html" class="btn-sidebar"><i class="fa-solid fa-user"></i> Conta</a>
@@ -218,9 +220,8 @@
             </form>
 <!-- GRID DE ANÚNCIOS -->
             <h2 class="titulo-secao"><i class="fa-solid fa-pills"></i> Medicamentos Disponíveis</h2>
-            <div class="grid-anuncios">
-                
-                <p style="margin-top:20px;">Nenhum anúncio encontrado.</p>
+            <div class="grid-anuncios" id="listaDoacoes">
+                <p style="margin-top:20px;">Nenhuma doação cadastrada neste navegador.</p>
             </div><br>
             <!-- BLOCO DE ANÚNCIOS GOOGLE ADSENSE -->
             
@@ -307,8 +308,35 @@ document.addEventListener("DOMContentLoaded", function() {
     const mensagem = document.getElementById('statusMensagem');
     const campoBusca = document.getElementById('campoBusca');
     const busca = parametros.get('q');
+    const listaDoacoes = document.getElementById('listaDoacoes');
 
     if (busca && campoBusca) campoBusca.value = busca;
+    if (listaDoacoes) {
+        try {
+            const doacoes = JSON.parse(localStorage.getItem('doefarmapet-doacoes') || '[]');
+            if (doacoes.length) {
+                listaDoacoes.replaceChildren();
+                doacoes.forEach(function(doacao) {
+                    const card = document.createElement('article');
+                    card.className = 'card';
+                    const titulo = document.createElement('h3');
+                    titulo.textContent = doacao.item;
+                    const tipo = document.createElement('p');
+                    tipo.textContent = doacao.tipo;
+                    const detalhes = document.createElement('p');
+                    detalhes.textContent = doacao.descricao;
+                    const local = document.createElement('p');
+                    local.textContent = doacao.bairro + ' - ' + doacao.cidade;
+                    const contato = document.createElement('p');
+                    contato.textContent = 'Contato: ' + doacao.telefone;
+                    card.append(titulo, tipo, detalhes, local, contato);
+                    listaDoacoes.appendChild(card);
+                });
+            }
+        } catch (erro) {
+            console.warn('Não foi possível carregar as doações salvas.', erro);
+        }
+    }
     if (mensagem && (status === 'sucesso' || status === 'erro' || status === 'erro_dados')) {
         mensagem.classList.add(status === 'sucesso' ? 'alert-success' : 'alert-error');
         mensagem.textContent = status === 'sucesso'
