@@ -1,8 +1,8 @@
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - DoeFarmaPet</title>
     <style>
         :root { --primary: #2D6A4F; --accent: #ff9900; }
@@ -74,8 +74,8 @@
 </a>
         
         <h2>Criar Conta</h2>
-        <?= $mensagem ?>
-        <form method="POST">
+        <p id="mensagem" role="status" aria-live="polite"></p>
+        <form id="formCadastro">
             <input type="text" name="nome" placeholder="Nome Completo" required>
             <input type="email" name="email" placeholder="E-mail" required>
             <input type="text" name="telefone" placeholder="WhatsApp" required>
@@ -93,7 +93,7 @@
             </div>
             
             <div class="senha-container">
-                <input type="password" name="senha" id="senha" placeholder="Crie uma Senha" required>
+                <input type="password" name="senha" id="senha" minlength="8" placeholder="Crie uma Senha (mínimo 8 caracteres)" required>
                 <span class="toggle-senha" onclick="toggle()">MOSTRAR</span>
             </div>
             
@@ -101,5 +101,48 @@
         </form>
         <p style="text-align:center; margin-top:15px;"><a href="login.html" style="color:var(--primary);">Voltar ao Login</a></p>
     </div>
+    <script type="module">
+        import { supabase, formatSupabaseError } from './supabase-client.js';
+
+        const form = document.getElementById('formCadastro');
+        const mensagem = document.getElementById('mensagem');
+
+        form.addEventListener('submit', async function(evento) {
+            evento.preventDefault();
+            const dados = new FormData(form);
+            const { data, error } = await supabase.auth.signUp({
+                email: dados.get('email'),
+                password: dados.get('senha'),
+                options: {
+                    emailRedirectTo: window.location.origin + '/index.html',
+                    data: {
+                        nome: dados.get('nome'),
+                        telefone: dados.get('telefone'),
+                        data_nascimento: dados.get('data_nascimento'),
+                        cep: dados.get('cep'),
+                        rua: dados.get('rua'),
+                        bairro: dados.get('bairro'),
+                        numero: dados.get('numero'),
+                        complemento: dados.get('complemento')
+                    }
+                }
+            });
+
+            if (error) {
+                mensagem.textContent = formatSupabaseError(error);
+                mensagem.style.color = '#a83228';
+                return;
+            }
+
+            if (data.session) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            mensagem.textContent = 'Cadastro iniciado. Confira seu e-mail para confirmar a conta.';
+            mensagem.style.color = 'var(--primary)';
+            form.reset();
+        });
+    </script>
 </body>
 </html>

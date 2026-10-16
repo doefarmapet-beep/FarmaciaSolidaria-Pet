@@ -34,6 +34,8 @@
         .rating input:focus-visible + label { outline: 3px solid #2d6a4f66; outline-offset: 3px; }
         .consent { display: flex; gap: 10px; align-items: start; color: var(--muted); font-size: .88rem; line-height: 1.45; }
         .consent input { width: 18px; min-height: 18px; margin: 1px 0 0; accent-color: var(--green); }
+        .auth-note { padding: 12px; background: #fff6ed; border-left: 3px solid var(--orange); color: var(--muted); font-size: .88rem; line-height: 1.5; }
+        .auth-note a { color: var(--green-dark); font-weight: 700; }
         button { display: inline-flex; min-height: 46px; justify-content: center; align-items: center; gap: 9px; width: 100%; margin-top: 18px; border: 0; border-radius: 5px; background: var(--green); color: white; font: inherit; font-weight: 700; cursor: pointer; }
         button:hover { background: var(--green-dark); }
         #status { min-height: 22px; margin: 14px 0 0; color: var(--green-dark); font-weight: 600; }
@@ -61,6 +63,7 @@
         <div class="layout">
             <form id="formAvaliacao">
                 <h2>Sua opinião</h2>
+                <p id="authRequired" class="auth-note" hidden>Para enviar uma avaliação, <a href="login.html">entre na sua conta</a>.</p>
                 <div class="field">
                     <label for="nome">Seu nome</label>
                     <input id="nome" name="nome" autocomplete="name" maxlength="80" required>
@@ -86,54 +89,10 @@
             <aside class="reviews">
                 <h2>Avaliações enviadas</h2>
                 <div id="lista" aria-live="polite"></div>
-                <p class="local-note">As avaliações ficam salvas somente neste navegador. Para compartilhá-las entre visitantes, é necessária uma integração com servidor.</p>
+                <p class="local-note">As avaliações ficam salvas no banco e podem ser vistas por todos os visitantes.</p>
             </aside>
         </div>
     </main>
-    <script>
-        const storageKey = 'doefarmapet-avaliacoes';
-        const form = document.getElementById('formAvaliacao');
-        const lista = document.getElementById('lista');
-
-        function carregarAvaliacoes() {
-            let avaliacoes = [];
-            try { avaliacoes = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (erro) { avaliacoes = []; }
-            lista.replaceChildren();
-            if (!avaliacoes.length) {
-                const vazio = document.createElement('p');
-                vazio.className = 'empty';
-                vazio.textContent = 'Ainda não há avaliações neste navegador.';
-                lista.appendChild(vazio);
-                return;
-            }
-            avaliacoes.slice().reverse().forEach(function(avaliacao) {
-                const card = document.createElement('article');
-                card.className = 'review';
-                const titulo = document.createElement('h3');
-                titulo.textContent = avaliacao.nome;
-                const estrelas = document.createElement('p');
-                estrelas.className = 'stars';
-                estrelas.textContent = '★'.repeat(Number(avaliacao.nota)) + '☆'.repeat(5 - Number(avaliacao.nota));
-                const comentario = document.createElement('p');
-                comentario.textContent = avaliacao.comentario;
-                card.append(titulo, estrelas, comentario);
-                lista.appendChild(card);
-            });
-        }
-
-        form.addEventListener('submit', function(evento) {
-            evento.preventDefault();
-            const dados = Object.fromEntries(new FormData(form).entries());
-            let avaliacoes = [];
-            try { avaliacoes = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (erro) { avaliacoes = []; }
-            avaliacoes.push(dados);
-            localStorage.setItem(storageKey, JSON.stringify(avaliacoes));
-            document.getElementById('status').textContent = 'Avaliação salva neste navegador. Obrigado por compartilhar sua opinião!';
-            form.reset();
-            carregarAvaliacoes();
-        });
-
-        carregarAvaliacoes();
-    </script>
+    <script type="module" src="avaliar.js"></script>
 </body>
 </html>

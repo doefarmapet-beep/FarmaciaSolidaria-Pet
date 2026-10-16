@@ -4,7 +4,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="theme-color" content="#2d6a4f">
-	<meta http-equiv="refresh" content="3; url=index.html">
 	<title>Saindo | DoeFarmaPet</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<style>
@@ -53,8 +52,20 @@
 	<main>
 		<i class="icon fa-solid fa-paw" aria-hidden="true"></i>
 		<h1>Até logo!</h1>
-		<p>Você será redirecionado para a página inicial em alguns segundos.</p>
+		<p id="status">Encerrando sua sessão...</p>
 		<a href="index.html">Voltar ao início</a>
 	</main>
+	<script type="module">
+		import { supabase, formatSupabaseError } from './supabase-client.js';
+
+		const status = document.getElementById('status');
+		const { error } = await supabase.auth.signOut();
+		if (error) {
+			status.textContent = formatSupabaseError(error);
+		} else {
+			status.textContent = 'Sessão encerrada. Redirecionando...';
+			window.setTimeout(function() { window.location.href = 'index.html'; }, 800);
+		}
+	</script>
 </body>
 </html>

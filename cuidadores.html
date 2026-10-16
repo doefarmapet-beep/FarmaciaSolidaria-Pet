@@ -42,7 +42,10 @@
         .caregiver p { margin: 4px 0; color: var(--muted); font-size: .9rem; line-height: 1.4; }
         .remove-button { width: auto; min-height: 36px; margin-top: 10px; padding: 0 12px; background: #a83228; font-size: .85rem; }
         .remove-button:hover { background: #7f211a; }
-        .local-note { margin-top: 16px; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+        .auth-note, .local-note { color: var(--muted); font-size: .88rem; line-height: 1.5; }
+        .auth-note { padding: 12px; background: #fff6ed; border-left: 3px solid var(--orange); }
+        .auth-note a { color: var(--green-dark); font-weight: 700; }
+        .local-note { margin-top: 16px; font-size: .82rem; }
         @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } .intro { grid-template-columns: 1fr; } .intro-icon { display: none; } }
         @media (max-width: 480px) { header { padding: 14px 4%; } header .brand span { font-size: .9rem; } main { margin: 28px auto; } form, .listing { padding: 19px; } .fields { grid-template-columns: 1fr; } .field.full { grid-column: auto; } }
     </style>
@@ -63,6 +66,7 @@
         <div class="layout">
             <form id="formCuidador">
                 <h2>Anunciar meu serviço</h2>
+                <p id="authRequired" class="auth-note" hidden>Para publicar um serviço, <a href="login.html">entre na sua conta</a>. Só o autor pode retirar o anúncio.</p>
                 <div class="fields">
                     <div class="field">
                         <label for="nome">Seu nome</label>
@@ -112,71 +116,10 @@
             <aside class="listing">
                 <h2>Serviços anunciados</h2>
                 <div id="lista" aria-live="polite"></div>
-                <p class="local-note">Os dados ficam salvos somente neste navegador. Para que outros tutores vejam os anúncios, é necessária uma integração com servidor.</p>
+                <p class="local-note">Serviços ativos ficam visíveis para todos os visitantes.</p>
             </aside>
         </div>
     </main>
-    <script>
-        const storageKey = 'doefarmapet-cuidadores';
-        const form = document.getElementById('formCuidador');
-        const lista = document.getElementById('lista');
-
-        function carregarCuidadores() {
-            let cuidadores = [];
-            try { cuidadores = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (erro) { cuidadores = []; }
-            lista.replaceChildren();
-            if (!cuidadores.length) {
-                const vazio = document.createElement('p');
-                vazio.className = 'empty';
-                vazio.textContent = 'Ainda não há serviços anunciados neste navegador.';
-                lista.appendChild(vazio);
-                return;
-            }
-            cuidadores.slice().reverse().forEach(function(cuidador, indiceReverso) {
-                const card = document.createElement('article');
-                card.className = 'caregiver';
-                const titulo = document.createElement('h3');
-                titulo.textContent = cuidador.nome + ' · ' + cuidador.servico;
-                const local = document.createElement('p');
-                local.textContent = cuidador.bairro + ', ' + cuidador.cidade + ' · ' + cuidador.pets;
-                const valor = document.createElement('p');
-                valor.textContent = cuidador.valor;
-                const descricao = document.createElement('p');
-                descricao.textContent = cuidador.descricao;
-                const contato = document.createElement('p');
-                contato.textContent = 'WhatsApp: ' + cuidador.telefone;
-                card.append(titulo, local, valor, descricao, contato);
-                const retirar = document.createElement('button');
-                retirar.type = 'button';
-                retirar.className = 'remove-button';
-                retirar.textContent = 'Retirar anúncio';
-                retirar.addEventListener('click', function() {
-                    if (!window.confirm('Deseja retirar este anúncio de serviço?')) return;
-                    cuidadores.splice(cuidadores.length - 1 - indiceReverso, 1);
-                    localStorage.setItem(storageKey, JSON.stringify(cuidadores));
-                    document.getElementById('status').textContent = 'Anúncio retirado.';
-                    carregarCuidadores();
-                });
-                card.appendChild(retirar);
-                lista.appendChild(card);
-            });
-        }
-
-        form.addEventListener('submit', function(evento) {
-            evento.preventDefault();
-            const dados = Object.fromEntries(new FormData(form).entries());
-            let cuidadores = [];
-            try { cuidadores = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (erro) { cuidadores = []; }
-            if (!Array.isArray(cuidadores)) cuidadores = [];
-            cuidadores.push(dados);
-            localStorage.setItem(storageKey, JSON.stringify(cuidadores));
-            document.getElementById('status').textContent = 'Anúncio cadastrado neste navegador.';
-            form.reset();
-            document.getElementById('cidade').value = 'Recife';
-            carregarCuidadores();
-        });
-
-        carregarCuidadores();
-    </script>
+    <script type="module" src="cuidadores.js"></script>
 </body>
 </html>

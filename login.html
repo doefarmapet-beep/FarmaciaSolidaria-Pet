@@ -137,7 +137,7 @@
             text-decoration: underline;
         }
         
-        #formRecuperar { display: none; margin-top: 15px; }
+        #formRecuperar, #formNovaSenha { display: none; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -150,8 +150,7 @@
         <h2>DOEFARMAPET</h2>
         <div id="mensagem" role="status" aria-live="polite" style="text-align:center;"></div>
 
-        <form method="POST" id="formLogin">
-            <input type="hidden" name="acao" value="login">
+        <form id="formLogin">
             <input type="email" name="email" placeholder="Seu E-mail" required>
             <div class="senha-container">
                 <input type="password" name="senha" id="s1" placeholder="Sua Senha" required>
@@ -161,21 +160,26 @@
         </form>
 
         <div id="formRecuperar">
-            <h3 style="color:#D97706; font-size:15px; text-align:center; margin-bottom:15px; font-weight:700;">CRIAR NOVA SENHA</h3>
-            <form method="POST">
-                <input type="hidden" name="acao" value="recuperar">
-                <input type="email" name="email" placeholder="Confirme seu E-mail" required>
-                <input type="text" name="resposta_nascimento" placeholder="Data de Nascimento (DD/MM/AAAA)" required>
+            <h3 style="color:#D97706; font-size:15px; text-align:center; margin-bottom:15px; font-weight:700;">RECUPERAR ACESSO</h3>
+            <form id="formSolicitarRecuperacao">
+                <input type="email" name="email" placeholder="Seu e-mail cadastrado" required>
+                <button type="submit" class="btn btn-recuperar">ENVIAR LINK DE RECUPERAÇÃO</button>
+            </form>
+        </div>
+
+        <div id="formNovaSenha">
+            <h3 style="color:#D97706; font-size:15px; text-align:center; margin-bottom:15px; font-weight:700;">DEFINIR NOVA SENHA</h3>
+            <form id="formAtualizarSenha">
                 <div class="senha-container">
-                    <input type="password" name="nova_senha" id="s2" placeholder="Nova Senha" required>
-                    <span class="olho" onclick="ver('s2')">MOSTRAR</span>
+                    <input type="password" name="nova_senha" id="novaSenha" placeholder="Nova senha (mínimo 8 caracteres)" minlength="8" required>
+                    <span class="olho" onclick="ver('novaSenha')">MOSTRAR</span>
                 </div>
-                <button type="submit" class="btn btn-recuperar">DEFINIR NOVA SENHA</button>
+                <button type="submit" class="btn btn-recuperar">SALVAR NOVA SENHA</button>
             </form>
         </div>
         
         <div class="links">
-            <a href="#" id="btnEsqueci" onclick="telaRecuperar()">Esqueci a senha</a>
+            <a href="#" id="btnEsqueci">Esqueci a senha</a>
             <a href="cadastrar.html">Não tem conta? Cadastre-se</a>
             <a href="index.html" style="font-weight:normal; color:#64748B;">Voltar ao Início</a>
         </div>
@@ -186,18 +190,87 @@
             var x = document.getElementById(id);
             x.type = x.type === "password" ? "text" : "password";
         }
-        function telaRecuperar() {
-            var fL = document.getElementById("formLogin");
-            var fR = document.getElementById("formRecuperar");
-            var btn = document.getElementById("btnEsqueci");
-            if (fR.style.display === "block") {
-                fR.style.display = "none"; fL.style.display = "block";
-                btn.innerText = "Esqueci a senha";
-            } else {
-                fR.style.display = "block"; fL.style.display = "none";
-                btn.innerText = "Voltar para Login";
-            }
+    </script>
+    <script type="module">
+        import { supabase, formatSupabaseError } from './supabase-client.js';
+
+        const formLogin = document.getElementById('formLogin');
+        const formRecuperar = document.getElementById('formRecuperar');
+        const formNovaSenha = document.getElementById('formNovaSenha');
+        const mensagem = document.getElementById('mensagem');
+        const btnEsqueci = document.getElementById('btnEsqueci');
+
+        function informar(texto, erro) {
+            mensagem.textContent = texto;
+            mensagem.style.color = erro ? '#a83228' : '#2d6a4f';
+            mensagem.style.marginBottom = '14px';
         }
+
+        function mostrarFormularioNovaSenha() {
+            formLogin.style.display = 'none';
+            formRecuperar.style.display = 'none';
+            formNovaSenha.style.display = 'block';
+            btnEsqueci.textContent = 'Voltar para Login';
+        }
+
+        supabase.auth.onAuthStateChange(function(evento) {
+            if (evento === 'PASSWORD_RECOVERY') mostrarFormularioNovaSenha();
+        });
+
+        btnEsqueci.addEventListener('click', function(evento) {
+            evento.preventDefault();
+            const exibindoRecuperacao = formRecuperar.style.display === 'block';
+            formLogin.style.display = exibindoRecuperacao ? 'block' : 'none';
+            formRecuperar.style.display = exibindoRecuperacao ? 'none' : 'block';
+            btnEsqueci.textContent = exibindoRecuperacao ? 'Esqueci a senha' : 'Voltar para Login';
+            informar('', false);
+        });
+
+        formLogin.addEventListener('submit', async function(evento) {
+            evento.preventDefault();
+            const dados = new FormData(formLogin);
+            const { error } = await supabase.auth.signInWithPassword({
+                email: dados.get('email'),
+                password: dados.get('senha')
+            });
+            if (error) {
+                informar(formatSupabaseError(error), true);
+                return;
+            }
+            window.location.href = 'index.html';
+        });
+
+        document.getElementById('formSolicitarRecuperacao').addEventListener('submit', async function(evento) {
+            evento.preventDefault();
+            const email = new FormData(evento.currentTarget).get('email');
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + '/login.html'
+            });
+            if (error) {
+                informar(formatSupabaseError(error), true);
+                return;
+            }
+            informar('Se o e-mail estiver cadastrado, você receberá um link para redefinir a senha.', false);
+        });
+
+        const tipoLink = new URLSearchParams(window.location.hash.slice(1)).get('type');
+        if (tipoLink === 'recovery' || new URLSearchParams(window.location.search).has('code')) {
+            mostrarFormularioNovaSenha();
+        }
+
+        document.getElementById('formAtualizarSenha').addEventListener('submit', async function(evento) {
+            evento.preventDefault();
+            const password = new FormData(evento.currentTarget).get('nova_senha');
+            const { error } = await supabase.auth.updateUser({ password });
+            if (error) {
+                informar(formatSupabaseError(error), true);
+                return;
+            }
+            await supabase.auth.signOut();
+            formNovaSenha.style.display = 'none';
+            formLogin.style.display = 'block';
+            informar('Senha atualizada. Entre usando a nova senha.', false);
+        });
     </script>
 </body>
 </html>
