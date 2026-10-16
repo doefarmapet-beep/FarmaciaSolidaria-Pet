@@ -285,7 +285,7 @@
                 </a>
             </div>
 
-            <div class="grid-avaliacoes" style="display: block;">
+            <div class="grid-avaliacoes" id="listaAvaliacoes" style="display: block;">
                 <p style="opacity: 0.8; margin-top: 15px;">Nenhuma avaliação disponível ainda. Seja o primeiro a avaliar!</p>
             </div>
             <footer class="rodape-projeto">
@@ -309,6 +309,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const campoBusca = document.getElementById('campoBusca');
     const busca = parametros.get('q');
     const listaDoacoes = document.getElementById('listaDoacoes');
+    const listaAvaliacoes = document.getElementById('listaAvaliacoes');
 
     if (busca && campoBusca) campoBusca.value = busca;
     if (listaDoacoes) {
@@ -335,6 +336,30 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         } catch (erro) {
             console.warn('Não foi possível carregar as doações salvas.', erro);
+        }
+    }
+    if (listaAvaliacoes) {
+        try {
+            const avaliacoes = JSON.parse(localStorage.getItem('doefarmapet-avaliacoes') || '[]');
+            if (avaliacoes.length) {
+                listaAvaliacoes.replaceChildren();
+                avaliacoes.slice().reverse().forEach(function(avaliacao) {
+                    const card = document.createElement('article');
+                    card.className = 'card-avaliacao';
+                    const estrelas = document.createElement('p');
+                    estrelas.className = 'estrelas-ouro';
+                    estrelas.textContent = '★'.repeat(Number(avaliacao.nota)) + '☆'.repeat(5 - Number(avaliacao.nota));
+                    const comentario = document.createElement('p');
+                    comentario.className = 'comentario-texto';
+                    comentario.textContent = avaliacao.comentario;
+                    const autor = document.createElement('p');
+                    autor.textContent = avaliacao.nome;
+                    card.append(estrelas, comentario, autor);
+                    listaAvaliacoes.appendChild(card);
+                });
+            }
+        } catch (erro) {
+            console.warn('Não foi possível carregar as avaliações salvas.', erro);
         }
     }
     if (mensagem && (status === 'sucesso' || status === 'erro' || status === 'erro_dados')) {

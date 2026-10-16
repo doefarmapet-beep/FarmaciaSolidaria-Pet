@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2d6a4f">
+    <title>Avaliar | DoeFarmaPet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --green: #2d6a4f; --green-dark: #1b4332; --orange: #e77825; --ink: #24332b; --muted: #66736b; --line: #d8e1db; }
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; color: var(--ink); font-family: "Segoe UI", sans-serif; background: #f4f7f3; }
+        header { padding: 18px 6%; background: var(--green-dark); color: white; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        header a { color: white; text-decoration: none; font-weight: 700; }
+        header .brand { display: flex; align-items: center; gap: 10px; }
+        header img { width: 42px; height: 42px; object-fit: cover; border-radius: 50%; }
+        main { width: min(1000px, 92%); margin: 42px auto; }
+        .intro { margin-bottom: 24px; }
+        h1 { margin: 0 0 8px; color: var(--green-dark); font-size: clamp(1.8rem, 4vw, 2.5rem); }
+        .intro p { max-width: 650px; margin: 0; color: var(--muted); line-height: 1.6; }
+        .layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr); gap: 24px; align-items: start; }
+        form, .reviews { padding: 26px; background: white; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 25px #1b43320d; }
+        h2 { margin: 0 0 18px; color: var(--green-dark); font-size: 1.2rem; }
+        .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 15px; }
+        label, legend { font-size: .9rem; font-weight: 700; }
+        input, textarea { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #bdcbc1; border-radius: 5px; background: white; color: var(--ink); font: inherit; }
+        textarea { min-height: 120px; resize: vertical; }
+        input:focus, textarea:focus { outline: 3px solid #2d6a4f2b; border-color: var(--green); }
+        fieldset { padding: 0; margin: 0 0 18px; border: 0; }
+        .rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+        .rating input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+        .rating label { color: #aeb9b1; font-size: 1.8rem; cursor: pointer; }
+        .rating label:hover, .rating label:hover ~ label, .rating input:checked ~ label { color: #e77825; }
+        .rating input:focus-visible + label { outline: 3px solid #2d6a4f66; outline-offset: 3px; }
+        .consent { display: flex; gap: 10px; align-items: start; color: var(--muted); font-size: .88rem; line-height: 1.45; }
+        .consent input { width: 18px; min-height: 18px; margin: 1px 0 0; accent-color: var(--green); }
+        button { display: inline-flex; min-height: 46px; justify-content: center; align-items: center; gap: 9px; width: 100%; margin-top: 18px; border: 0; border-radius: 5px; background: var(--green); color: white; font: inherit; font-weight: 700; cursor: pointer; }
+        button:hover { background: var(--green-dark); }
+        #status { min-height: 22px; margin: 14px 0 0; color: var(--green-dark); font-weight: 600; }
+        #lista { display: grid; gap: 12px; }
+        .empty { color: var(--muted); line-height: 1.5; }
+        .review { padding: 14px; border-left: 3px solid var(--orange); background: #f4f7f3; }
+        .review h3 { margin: 0 0 6px; font-size: 1rem; }
+        .review p { margin: 5px 0; color: var(--muted); font-size: .9rem; line-height: 1.45; }
+        .review .stars { color: var(--orange); }
+        .local-note { margin-top: 16px; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+        @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } }
+        @media (max-width: 480px) { header { padding: 14px 4%; } header .brand span { font-size: .9rem; } main { margin: 28px auto; } form, .reviews { padding: 19px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <a class="brand" href="index.html"><img src="logo.jpeg" alt=""><span>DOEFARMAPET</span></a>
+        <a href="index.html"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Início</a>
+    </header>
+    <main>
+        <section class="intro">
+            <h1>Deixe sua avaliação</h1>
+            <p>Conte como foi sua experiência e ajude outras pessoas a conhecer a comunidade DoeFarmaPet.</p>
+        </section>
+        <div class="layout">
+            <form id="formAvaliacao">
+                <h2>Sua opinião</h2>
+                <div class="field">
+                    <label for="nome">Seu nome</label>
+                    <input id="nome" name="nome" autocomplete="name" maxlength="80" required>
+                </div>
+                <fieldset>
+                    <legend>Como você avalia a iniciativa?</legend>
+                    <div class="rating" role="radiogroup" aria-label="Nota de 1 a 5 estrelas">
+                        <input type="radio" id="nota5" name="nota" value="5" required><label for="nota5" aria-label="5 estrelas">★</label>
+                        <input type="radio" id="nota4" name="nota" value="4"><label for="nota4" aria-label="4 estrelas">★</label>
+                        <input type="radio" id="nota3" name="nota" value="3"><label for="nota3" aria-label="3 estrelas">★</label>
+                        <input type="radio" id="nota2" name="nota" value="2"><label for="nota2" aria-label="2 estrelas">★</label>
+                        <input type="radio" id="nota1" name="nota" value="1"><label for="nota1" aria-label="1 estrela">★</label>
+                    </div>
+                </fieldset>
+                <div class="field">
+                    <label for="comentario">Seu comentário</label>
+                    <textarea id="comentario" name="comentario" maxlength="500" placeholder="Escreva sua avaliação" required></textarea>
+                </div>
+                <label class="consent"><input type="checkbox" required><span>Autorizo a exibição pública do meu nome e comentário nesta página.</span></label>
+                <button type="submit"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Enviar avaliação</button>
+                <p id="status" role="status" aria-live="polite"></p>
+            </form>
+            <aside class="reviews">
+                <h2>Avaliações enviadas</h2>
+                <div id="lista" aria-live="polite"></div>
+                <p class="local-note">As avaliações ficam salvas somente neste navegador. Para compartilhá-las entre visitantes, é necessária uma integração com servidor.</p>
+            </aside>
+        </div>
+    </main>
+    <script>
+        const storageKey = 'doefarmapet-avaliacoes';
+        const form = document.getElementById('formAvaliacao');
+        const lista = document.getElementById('lista');
+
+        function carregarAvaliacoes() {
+            let avaliacoes = [];
+            try { avaliacoes = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (erro) { avaliacoes = []; }
+            lista.replaceChildren();
+            if (!avaliacoes.length) {
+                const vazio = document.createElement('p');
+                vazio.className = 'empty';
+                vazio.textContent = 'Ainda não há avaliações neste navegador.';
+                lista.appendChild(vazio);
+                return;
+            }
+            avaliacoes.slice().reverse().forEach(function(avaliacao) {
+                const card = document.createElement('article');
+                card.className = 'review';
+                const titulo = document.createElement('h3');
+                titulo.textContent = avaliacao.nome;
+                const estrelas = document.createElement('p');
+                estrelas.className = 'stars';
+                estrelas.textContent = '★'.repeat(Number(avaliacao.nota)) + '☆'.repeat(5 - Number(avaliacao.nota));
+                const comentario = document.createElement('p');
+                comentario.textContent = avaliacao.comentario;
+                card.append(titulo, estrelas, comentario);
+                lista.appendChild(card);
+            });
+        }
+
+        form.addEventListener('submit', function(evento) {
+            evento.preventDefault();
+            const dados = Object.fromEntries(new FormData(form).entries());
+            let avaliacoes = [];
+            try { avaliacoes = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (erro) { avaliacoes = []; }
+            avaliacoes.push(dados);
+            localStorage.setItem(storageKey, JSON.stringify(avaliacoes));
+            document.getElementById('status').textContent = 'Avaliação salva neste navegador. Obrigado por compartilhar sua opinião!';
+            form.reset();
+            carregarAvaliacoes();
+        });
+
+        carregarAvaliacoes();
+    </script>
+</body>
+</html>
